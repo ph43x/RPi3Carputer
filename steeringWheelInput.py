@@ -10,6 +10,7 @@ from shlex import split
 
 GPIO.setmode(GPIO.BOARD)
 
+turnoff = 31    #bcm pin 06
 volDown = 38 	#bcm pin 20
 volUp = 36		#bcm pin 16
 seekDown = 37	#bcm pin 26
@@ -19,6 +20,7 @@ buttonMode=40	#bcm pin 21
 currentVolume = 50 #value for keeping track of volume
 
 #Set which pins GPIO is looking at for input
+GPIO.setup(turnoff, GPIO.IN)
 GPIO.setup(volDown, GPIO.IN)
 GPIO.setup(volUp, GPIO.IN)
 GPIO.setup(seekDown, GPIO.IN)
@@ -27,6 +29,9 @@ GPIO.setup(buttonPower, GPIO.IN)
 GPIO.setup(buttonMode, GPIO.IN)
 
 while(1):
+	if GPIO.input(turnoff) == 1:
+		call(split('shutdown now'))
+
 	if GPIO.input(volUp) == 1:
 		if currentVolume >= 100:
 			return;
