@@ -1,0 +1,69 @@
+# Arduino Code
+const int wheelWireIn1 = 
+const int wheelWireIn2 = 
+
+const int volUp = 
+const int volDown = 
+const int seekUp = 
+const int seekDown = 
+const int mode = 
+const int power = 
+
+const int shortButton = 1000;  #This is either going to work with the present values
+const int lowOhmButton = 600;  #or i'm going to have to set the wire1 and 2 as input 
+const int highOhmButton = 100; #pull_ups and reverse the order of these values.
+
+void setup() {
+	pinMode(volUp, OUTPUT); #All the GPIO pins as outputs
+	pinMode(volDown, OUTPUT);
+	pinMode(seekUp, OUTPUT);
+	pinMode(seekDown, OUTPUT);
+	pinMode(mode, OUTPUT);
+	pinMode(power, OUTPUT);
+	Serial.begin(9600);
+}
+
+
+void loop() {
+	int wire1 = analogRead(wheelWireIn1); #whiteWire
+	int wire2 = analogRead(wheelWireIn2); #BlueWire probably
+
+	if (wire1 > shortButton) {
+		digitalWrite(power, HIGH);
+		delay(100);
+		digitalWrite(power, LOW);
+	}
+	if (wire1 < shortButton && wire1 > lowOhmButton) {
+		digitalWrite(seekDown, HIGH);
+		delay(100);
+		digitalWrite(seekDown, LOW);
+	}
+	if (wire1 < lowOhmButton && wire1 > highOhmButton) {
+		digitalWrite(volDown, HIGH);
+		delay(100);
+		digitalWrite(volDown, LOW);
+	}
+	if (wire2 > shortButton) {
+		digitalWrite(mode, HIGH);
+		delay(100);
+		digitalWrite(mode, LOW);
+	}
+	if (wire2 < shortButton && wire2 > lowOhmButton) {
+		digitalWrite(seekUp, HIGH);
+		delay(100);
+		digitalWrite(seekUp, LOW);
+	}
+	if (wire2 < lowOhmButton && wire2 > highOhmButton) {
+		digitalWrite(volUp, HIGH);
+		delay(100);
+		digitalWrite(volUp, LOW);
+	}
+	else {
+		digitalWrite(volUp, LOW);
+		digitalWrite(volDown, LOW);
+		digitalWrite(seekUp, LOW);
+		digitalWrite(seekDown, LOW);
+		digitalWrite(mode, LOW);
+		digitalWrite(power, LOW);
+	}
+}
