@@ -42,9 +42,13 @@ try:
 				buttonModePressed = 1
 				buttonModePressedStart = datetime.datetime.now()
 				buttonModePressedFinish = buttonModePressedStart + datetime.timedelta(minutes = 1)
+				call(split('xbmc-send --host=127.0.0.1 --action="ActivateWindow(music, sources://media/6B15-80A5/)"'))
+				call(split('xbmc-send --host=127.0.0.1 --action="Action(select)"'))
+				call(split('xbmc-send --host=127.0.0.1 --action="Action(select)"'))
 				sleep(.1)
 			if GPIO.input(buttonMode) == 1 and buttonModePressed == 1:
 				buttonModePressed = 0
+				call(split('xbmc-send --host=127.0.0.1 --action="ActivateWindow(home)"'))
 				sleep(.1)
 			if buttonModePressedStart > buttonModePressedFinish and buttonModePressed == 1:
 				buttonModePressed = 0
@@ -68,46 +72,44 @@ try:
 					currentVolume = currentVolume - 5
 					call(split('xbmc-send --host=127.0.0.1 --action="SetVolume(percent[$currentVolume])"')
 					sleep(.25)
-		
-			#Now I would like to use Seek to skip tracks or skip folders. Not real sure how to do this yet
+					     
+			if GPIO.input(volUp) == 1 and buttonModePressed == 1:
+				#run command for next track in OSMC
+				call(split('xbmc-send --host=127.0.0.1 --action="Action(up)"'))
+				sleep(.25)
+
+			if GPIO.input(volDown) == 1 and buttonModePressed == 1:
+				#run command for previous track in OSMC
+				call(split('xbmc-send --host=127.0.0.1 --action="Action(down)"'))
+				sleep(.25)
+					     
 			if GPIO.input(seekUp) == 1 and buttonModePressed == 0:
 				#run command for next track in OSMC
 				call(split('xbmc-send --host=127.0.0.1 --action="PlayerControl(Next)"'))
 				sleep(.25)
-
 			if GPIO.input(seekDown) == 1 and buttonModePressed == 0:
 				#run command for previous track in OSMC
 				call(split('xbmc-send --host=127.0.0.1 --action="PlayerControl(Previous)"'))
 				sleep(.25)
-					     
-# PlayMedia(media[,isdir][,1],[playoffset=xx]) seems to be the command i'm looking for
-# I just need a way to find what the current directory ID is, and increment it
-# Or http://kodi.wiki/view/Action_IDs , Action(action) , Action( [,window])
-# also perhaps using a series of commands will achieve the same thing.
-#call(split('xbmc-send --host=127.0.0.1 --action="Action(ParentDir[,filemanager])"'))
-#call(split('xbmc-send --host=127.0.0.1 --action="Action(Down[,filemanager])"'))
-#call(split('xbmc-send --host=127.0.0.1 --action="Action(Select[,filemanager])"'))
-#call(split('xbmc-send --host=127.0.0.1 --action="Action(PlayPause[,filemanager])"'))
-
-#call(split('xbmc-send --host=127.0.0.1 --action="Action(ParentDir[filemanager,window])"'))
-#call(split('xbmc-send --host=127.0.0.1 --action="Action(Down[filemanager,window])"'))
-#call(split('xbmc-send --host=127.0.0.1 --action="Action(Select[filemanager,window])"'))
-#call(split('xbmc-send --host=127.0.0.1 --action="Action(Play[filemanager,window])"'))
-			
+					     			
 			if GPIO.input(seekUp) == 1 and buttonModePressed == 1:
 				#run command for next track in OSMC
-				call(split('xbmc-send --host=127.0.0.1 --action="PlayerControl(Next)"'))
+				call(split('xbmc-send --host=127.0.0.1 --action="Action(ParentDir)"'))
 				sleep(.25)
-
 			if GPIO.input(seekDown) == 1 and buttonModePressed == 1:
 				#run command for previous track in OSMC
-				call(split('xbmc-send --host=127.0.0.1 --action="PlayerControl(Previous)"'))
+				call(split('xbmc-send --host=127.0.0.1 --action="Action(select)"'))
 				sleep(.25)
 		
-			if GPIO.input(buttonPower) == 1:
+			if GPIO.input(buttonPower) == 1 and buttonModePressed == 0:
 				#run command for play in OSMC, play acts as play/pause
 				call(split('xbmc-send --host=127.0.0.1 --action="PlayerControl(Play)"'))
 				sleep(.25)
-
+					     
+			if GPIO.input(buttonPower) == 1 and buttonModePressed == 1:
+				#run command for play in OSMC, play acts as play/pause
+				call(split('xbmc-send --host=127.0.0.1 --action="PlayerControl(PartyMode)"'))
+				call(split('xbmc-send --host=127.0.0.1 --action="Action(select)"'))
+				sleep(.25)
 finally:
 	GPIO.cleanup()
