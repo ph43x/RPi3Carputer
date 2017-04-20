@@ -42,8 +42,7 @@ try:
 				buttonModePressed = 1
 				buttonModePressedStart = datetime.datetime.now()
 				buttonModePressedFinish = buttonModePressedStart + datetime.timedelta(minutes = 1)
-				call(split('xbmc-send --host=127.0.0.1 --action="ActivateWindow(music, sources://media/6B15-80A5/)"'))
-				call(split('xbmc-send --host=127.0.0.1 --action="Action(select)"'))
+				call(split('xbmc-send --host=127.0.0.1 --action="ActivateWindow(favourites'))
 				call(split('xbmc-send --host=127.0.0.1 --action="Action(select)"'))
 				sleep(.1)
 			if GPIO.input(buttonMode) == 1 and buttonModePressed == 1:
@@ -52,6 +51,7 @@ try:
 				sleep(.1)
 			if buttonModePressedStart > buttonModePressedFinish and buttonModePressed == 1:
 				buttonModePressed = 0
+			
 			#Now that the mode selector is out of the way, we need to check if mode is pressed for everything
 			if GPIO.input(volUp) == 1 and buttonModePressed == 0:
 				if currentVolume >= 100:
