@@ -42,7 +42,7 @@ try:
 				buttonModePressed = 1
 				buttonModePressedStart = datetime.datetime.now()
 				buttonModePressedFinish = buttonModePressedStart + datetime.timedelta(minutes = 1)
-				call(split('xbmc-send --host=127.0.0.1 --action="ActivateWindow(favourites'))
+				call(split('xbmc-send --host=127.0.0.1 --action="ActivateWindow(favourites)"'))
 				call(split('xbmc-send --host=127.0.0.1 --action="Action(select)"'))
 				sleep(.1)
 			if GPIO.input(buttonMode) == 1 and buttonModePressed == 1:
