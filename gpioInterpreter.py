@@ -9,8 +9,9 @@ from subprocess import call
 from shlex import split
 import datetime
 
-#  am using the BOARD gpio settings, so this will be the pin number not how BCM sees it
-# After the pins I have values for volume, if mode is pressed, and the time it was pressed
+# using the BOARD gpio settings, so this will be the pin number not how BCM
+# sees it. After the pins I have values for volume, if mode is pressed, and
+# the time it was pressed
 GPIO.setmode(GPIO.BOARD)
 turnoff = 31
 volDown = 38
@@ -24,7 +25,8 @@ modePressed = 0
 modeStart = 0
 modeFinish = 0
 
-# Set which pins GPIO is looking at for input and putting them in a pull down state so they stay at 0 volts until triggered
+# Set which pins GPIO is looking at for input and putting them in a pull
+# down state so they stay at 0 volts until triggered
 GPIO.setup(turnoff, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(volDown, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(volUp, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
@@ -37,8 +39,9 @@ try:
     while True:
         if GPIO.input(turnoff) == 1:
             call(split('shutdown now'))
-            # Ok, I wanted a function button so Mode will be it, it will auto turn off after 1 minute
-            # or if pressed again within that time. This will allow other buttons to have improved functionality
+            # Ok, I wanted a function button so Mode will be it, it will auto 
+			# turn off after 1 minute or if pressed again within that time.
+            # This will allow other buttons to have improved functionality
         if GPIO.input(buttonMode) == 1 and modePressed == 0:
             modePressed = 1
             modeStart = datetime.datetime.now()
@@ -52,15 +55,17 @@ try:
             sleep(0.1)
         if modeStart > modeFinish and modePressed == 1:
             modePressed = 0
-            # Now that the mode selector is out of the way, we need to check if mode is pressed for everything
+            # Now that the mode selector is out of the way, we need to check 
+			# if mode is pressed for everything
         if GPIO.input(volUp) == 1 and modePressed == 0:
             if currentVolume > 95:
                 currentVolume = 100
             else:
                 #run command for increasing volume in OSMC by 5%
                 currentVolume = currentVolume + 5
-                # since call was imported from subprocess there is no need to use subprocess.call just call
-                # also since split was imported from shlex, again only split is used instead of shlex.split
+                # since call was imported from subprocess there is no need to
+				# use subprocess.call just call. Also since split was imported
+				# from shlex, again only split is used instead of shlex.split
                 call(split('xbmc-send --action="SetVolume(percent[$currentVolume])"'))
                 sleep(0.25)
 
