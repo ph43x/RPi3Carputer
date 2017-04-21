@@ -67,7 +67,7 @@ try:
             currentVolume = 0
         if GPIO.input(volDown) == 1 and modePressed == 0 and currentVolume > 4:
             currentVolume = currentVolume - 5
-            call(shlex.split('xbmc-send --action="SetVolume(percent[$currentVolume])"')
+            call(shlex.split('xbmc-send --action="SetVolume(percent[$currentVolume])"'))
             sleep(0.25)
         # Secondary Volume controls and secondary seek controls control folder navigation
         if GPIO.input(volUp) == 1 and modePressed == 1:
