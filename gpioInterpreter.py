@@ -55,28 +55,21 @@ try:
             sleep(0.1)
         if modeStart > modeFinish and modePressed == 1:
             modePressed = 0
-            # Now that the mode selector is out of the way, we need to check
-            # if mode is pressed for everything
-        if GPIO.input(volUp) == 1 and modePressed == 0:
-            if currentVolume > 95:
-                currentVolume = 100
-            else:
-                # run command for increasing volume in OSMC by 5%
-                currentVolume = currentVolume + 5
-                # since call was imported from subprocess there is no need to
-                # use subprocess.call just call.
-                call(shlex.split('xbmc-send --action="SetVolume(percent[$currentVolume])"'))
-                sleep(0.25)
-
-        if GPIO.input(volDown) == 1 and modePressed == 0:
-            if currentVolume < 5:
-                currentVolume = 0
-            else:
-                #run command for decreasing volume in OSMC by 5%
-                currentVolume = currentVolume - 5
-                call(shlex.split('xbmc-send --action="SetVolume(percent[$currentVolume])"')
-                sleep(0.25)
-
+            # Volume controls, checks to make sure the currentVolume will not
+            # go outside the range of 0-100
+        if GPIO.input(volUp) == 1 and modePressed == 0 and currentVolume > 95: 
+            currentVolume = 100
+        if GPIO.input(volUp) == 1 and modePressed == 0 and currentVolume < 96:
+            currentVolume = currentVolume + 5
+            call(shlex.split('xbmc-send --action="SetVolume(percent[$currentVolume])"'))
+            sleep(0.25)
+        if GPIO.input(volDown) == 1 and modePressed == 0 and currentVolume < 5:
+            currentVolume = 0
+        if GPIO.input(volDown) == 1 and modePressed == 0 and currentVolume > 4:
+            currentVolume = currentVolume - 5
+            call(shlex.split('xbmc-send --action="SetVolume(percent[$currentVolume])"')
+            sleep(0.25)
+        # Secondary Volume controls and secondary seek controls control folder navigation
         if GPIO.input(volUp) == 1 and modePressed == 1:
             # run command for next track in OSMC
             call(shlex.split('xbmc-send --action="Action(up)"'))
