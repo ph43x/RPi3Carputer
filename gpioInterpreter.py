@@ -39,8 +39,8 @@ try:
     while True:
         if GPIO.input(turnoff) == 1:
             call(split('shutdown now'))
-            # Ok, I wanted a function button so Mode will be it, it will auto 
-			# turn off after 1 minute or if pressed again within that time.
+            # Ok, I wanted a function button so Mode will be it, it will auto
+            # turn off after 1 minute or if pressed again within that time.
             # This will allow other buttons to have improved functionality
         if GPIO.input(buttonMode) == 1 and modePressed == 0:
             modePressed = 1
@@ -55,17 +55,17 @@ try:
             sleep(0.1)
         if modeStart > modeFinish and modePressed == 1:
             modePressed = 0
-            # Now that the mode selector is out of the way, we need to check 
-			# if mode is pressed for everything
+            # Now that the mode selector is out of the way, we need to check
+            # if mode is pressed for everything
         if GPIO.input(volUp) == 1 and modePressed == 0:
             if currentVolume > 95:
                 currentVolume = 100
             else:
-                #run command for increasing volume in OSMC by 5%
+                # run command for increasing volume in OSMC by 5%
                 currentVolume = currentVolume + 5
                 # since call was imported from subprocess there is no need to
 				# use subprocess.call just call. Also since split was imported
-				# from shlex, again only split is used instead of shlex.split
+                # from shlex, again only split is used instead of shlex.split
                 call(split('xbmc-send --action="SetVolume(percent[$currentVolume])"'))
                 sleep(0.25)
 
