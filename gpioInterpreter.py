@@ -70,7 +70,7 @@ try:
                 #run command for decreasing volume in OSMC by 5%
                 currentVolume = currentVolume - 5
                 call(split('xbmc-send --host=127.0.0.1 --action="SetVolume(percent[$currentVolume])"')
-                sleep(0.25)	     
+                sleep(0.25)
         if GPIO.input(volUp) == 1 and buttonModePressed == 1:
             #run command for next track in OSMC
             call(split('xbmc-send --host=127.0.0.1 --action="Action(up)"'))
