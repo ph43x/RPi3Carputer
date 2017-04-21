@@ -63,6 +63,7 @@ try:
                 # also since split was imported from shlex, again only split is used instead of shlex.split
                 call(split('xbmc-send --action="SetVolume(percent[$currentVolume])"'))
                 sleep(0.25)
+
         if GPIO.input(volDown) == 1 and modePressed == 0:
             if currentVolume < 5:
                 currentVolume = 0
@@ -71,6 +72,7 @@ try:
                 currentVolume = currentVolume - 5
                 call(split('xbmc-send --action="SetVolume(percent[$currentVolume])"')
                 sleep(0.25)
+
         if GPIO.input(volUp) == 1 and modePressed == 1:
             # run command for next track in OSMC
             call(split('xbmc-send --action="Action(up)"'))
