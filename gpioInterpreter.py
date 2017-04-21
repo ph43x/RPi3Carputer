@@ -6,7 +6,7 @@
 from time import sleep
 import RPi.GPIO as GPIO
 from subprocess import call
-from shlex import split
+import shlex
 import datetime
 
 # using the BOARD gpio settings, so this will be the pin number not how BCM
@@ -38,7 +38,7 @@ GPIO.setup(buttonMode, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 try:
     while True:
         if GPIO.input(turnoff) == 1:
-            call(split('shutdown now'))
+            call(shlex.split('shutdown now'))
             # Ok, I wanted a function button so Mode will be it, it will auto
             # turn off after 1 minute or if pressed again within that time.
             # This will allow other buttons to have improved functionality
@@ -46,12 +46,12 @@ try:
             modePressed = 1
             modeStart = datetime.datetime.now()
             modeFinish = modeStart + datetime.timedelta(minutes = 1)
-            call(split('xbmc-send --action="ActivateWindow(favourites)"'))
-            call(split('xbmc-send --action="Action(select)"'))
+            call(shlex.split('xbmc-send --action="ActivateWindow(favourites)"'))
+            call(shlex.split('xbmc-send --action="Action(select)"'))
             sleep(0.1)
         if GPIO.input(buttonMode) == 1 and modePressed == 1:
             modePressed = 0
-            call(split('xbmc-send --action="ActivateWindow(home)"'))
+            call(shlex.split('xbmc-send --action="ActivateWindow(home)"'))
             sleep(0.1)
         if modeStart > modeFinish and modePressed == 1:
             modePressed = 0
@@ -64,9 +64,8 @@ try:
                 # run command for increasing volume in OSMC by 5%
                 currentVolume = currentVolume + 5
                 # since call was imported from subprocess there is no need to
-				# use subprocess.call just call. Also since split was imported
-                # from shlex, again only split is used instead of shlex.split
-                call(split('xbmc-send --action="SetVolume(percent[$currentVolume])"'))
+                # use subprocess.call just call.
+                call(shlex.split('xbmc-send --action="SetVolume(percent[$currentVolume])"'))
                 sleep(0.25)
 
         if GPIO.input(volDown) == 1 and modePressed == 0:
@@ -75,41 +74,41 @@ try:
             else:
                 #run command for decreasing volume in OSMC by 5%
                 currentVolume = currentVolume - 5
-                call(split('xbmc-send --action="SetVolume(percent[$currentVolume])"')
+                call(shlex.split('xbmc-send --action="SetVolume(percent[$currentVolume])"')
                 sleep(0.25)
 
         if GPIO.input(volUp) == 1 and modePressed == 1:
             # run command for next track in OSMC
-            call(split('xbmc-send --action="Action(up)"'))
+            call(shlex.split('xbmc-send --action="Action(up)"'))
             sleep(0.25)
         if GPIO.input(volDown) == 1 and modePressed == 1:
             # run command for previous track in OSMC
-            call(split('xbmc-send --action="Action(down)"'))
+            call(shlex.split('xbmc-send --action="Action(down)"'))
             sleep(0.25)
         if GPIO.input(seekUp) == 1 and modePressed == 0:
             # run command for next track in OSMC
-            call(split('xbmc-send --action="PlayerControl(Next)"'))
+            call(shlex.split('xbmc-send --action="PlayerControl(Next)"'))
             sleep(0.25)
         if GPIO.input(seekDown) == 1 and modePressed == 0:
             # run command for previous track in OSMC
-            call(split('xbmc-send --action="PlayerControl(Previous)"'))
+            call(shlex.split('xbmc-send --action="PlayerControl(Previous)"'))
             sleep(0.25)
         if GPIO.input(seekUp) == 1 and modePressed == 1:
             # run command for next track in OSMC
-            call(split('xbmc-send --action="Action(ParentDir)"'))
+            call(shlex.split('xbmc-send --action="Action(ParentDir)"'))
             sleep(0.25)
         if GPIO.input(seekDown) == 1 and modePressed == 1:
             # run command for previous track in OSMC
-            call(split('xbmc-send --action="Action(select)"'))
+            call(shlex.split('xbmc-send --action="Action(select)"'))
             sleep(0.25)
         if GPIO.input(buttonPower) == 1 and modePressed == 0:
             # run command for play in OSMC, play acts as play/pause
-            call(split('xbmc-send --action="PlayerControl(Play)"'))
+            call(shlex.split('xbmc-send --action="PlayerControl(Play)"'))
             sleep(0.25)
         if GPIO.input(buttonPower) == 1 and modePressed == 1:
             # run command for play in OSMC, play acts as play/pause
-            call(split('xbmc-send --action="PlayerControl(PartyMode)"'))
-            call(split('xbmc-send --action="Action(select)"'))
+            call(shlex.split('xbmc-send --action="PlayerControl(PartyMode)"'))
+            call(shlex.split('xbmc-send --action="Action(select)"'))
             sleep(0.25)
 finally:
     GPIO.cleanup()
