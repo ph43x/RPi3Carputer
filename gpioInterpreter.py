@@ -52,7 +52,6 @@ try:
             sleep(0.1)
         if buttonModePressedStart > buttonModePressedFinish and buttonModePressed == 1:
             buttonModePressed = 0
-			
             #Now that the mode selector is out of the way, we need to check if mode is pressed for everything
         if GPIO.input(volUp) == 1 and buttonModePressed == 0:
             if currentVolume > 95:
@@ -64,53 +63,46 @@ try:
                 #also since split was imported from shlex, again only split is used instead of shlex.split
                 call(split('xbmc-send --host=127.0.0.1 --action="SetVolume(percent[$currentVolume])"'))
                 sleep(0.25)
-		
-            if GPIO.input(volDown) == 1 and buttonModePressed == 0:
-                if currentVolume < 5:
-                    currentVolume = 0
-                else:
-                    #run command for decreasing volume in OSMC by 5%
-                    currentVolume = currentVolume - 5
-                    call(split('xbmc-send --host=127.0.0.1 --action="SetVolume(percent[$currentVolume])"')
-                    sleep(0.25)
-					     
-                if GPIO.input(volUp) == 1 and buttonModePressed == 1:
-                    #run command for next track in OSMC
-                    call(split('xbmc-send --host=127.0.0.1 --action="Action(up)"'))
-                    sleep(0.25)
-
-                if GPIO.input(volDown) == 1 and buttonModePressed == 1:
-                    #run command for previous track in OSMC
-                    call(split('xbmc-send --host=127.0.0.1 --action="Action(down)"'))
-                    sleep(0.25)
-					     
-                if GPIO.input(seekUp) == 1 and buttonModePressed == 0:
-                    #run command for next track in OSMC
-                    call(split('xbmc-send --host=127.0.0.1 --action="PlayerControl(Next)"'))
-                    sleep(0.25)
-                if GPIO.input(seekDown) == 1 and buttonModePressed == 0:
-                    #run command for previous track in OSMC
-                    call(split('xbmc-send --host=127.0.0.1 --action="PlayerControl(Previous)"'))
-                    sleep(0.25)
-					     			
-                if GPIO.input(seekUp) == 1 and buttonModePressed == 1:
-                    #run command for next track in OSMC
-                    call(split('xbmc-send --host=127.0.0.1 --action="Action(ParentDir)"'))
-                    sleep(0.25)
-                if GPIO.input(seekDown) == 1 and buttonModePressed == 1:
-                    #run command for previous track in OSMC
-                    call(split('xbmc-send --host=127.0.0.1 --action="Action(select)"'))
-                    sleep(0.25)
-		
-                if GPIO.input(buttonPower) == 1 and buttonModePressed == 0:
-                    #run command for play in OSMC, play acts as play/pause
-                    call(split('xbmc-send --host=127.0.0.1 --action="PlayerControl(Play)"'))
-                    sleep(0.25)
-					     
-                if GPIO.input(buttonPower) == 1 and buttonModePressed == 1:
-                    #run command for play in OSMC, play acts as play/pause
-                    call(split('xbmc-send --host=127.0.0.1 --action="PlayerControl(PartyMode)"'))
-                    call(split('xbmc-send --host=127.0.0.1 --action="Action(select)"'))
-                    sleep(0.25)
+        if GPIO.input(volDown) == 1 and buttonModePressed == 0:
+            if currentVolume < 5:
+                currentVolume = 0
+            else:
+                #run command for decreasing volume in OSMC by 5%
+                currentVolume = currentVolume - 5
+                call(split('xbmc-send --host=127.0.0.1 --action="SetVolume(percent[$currentVolume])"')
+                sleep(0.25)	     
+        if GPIO.input(volUp) == 1 and buttonModePressed == 1:
+            #run command for next track in OSMC
+            call(split('xbmc-send --host=127.0.0.1 --action="Action(up)"'))
+            sleep(0.25)
+        if GPIO.input(volDown) == 1 and buttonModePressed == 1:
+            #run command for previous track in OSMC
+            call(split('xbmc-send --host=127.0.0.1 --action="Action(down)"'))
+            sleep(0.25)
+        if GPIO.input(seekUp) == 1 and buttonModePressed == 0:
+            #run command for next track in OSMC
+            call(split('xbmc-send --host=127.0.0.1 --action="PlayerControl(Next)"'))
+            sleep(0.25)
+        if GPIO.input(seekDown) == 1 and buttonModePressed == 0:
+            #run command for previous track in OSMC
+            call(split('xbmc-send --host=127.0.0.1 --action="PlayerControl(Previous)"'))
+            sleep(0.25)
+        if GPIO.input(seekUp) == 1 and buttonModePressed == 1:
+            #run command for next track in OSMC
+            call(split('xbmc-send --host=127.0.0.1 --action="Action(ParentDir)"'))
+            sleep(0.25)
+        if GPIO.input(seekDown) == 1 and buttonModePressed == 1:
+            #run command for previous track in OSMC
+            call(split('xbmc-send --host=127.0.0.1 --action="Action(select)"'))
+            sleep(0.25)
+        if GPIO.input(buttonPower) == 1 and buttonModePressed == 0:
+            #run command for play in OSMC, play acts as play/pause
+            call(split('xbmc-send --host=127.0.0.1 --action="PlayerControl(Play)"'))
+            sleep(0.25)
+        if GPIO.input(buttonPower) == 1 and buttonModePressed == 1:
+            #run command for play in OSMC, play acts as play/pause
+            call(split('xbmc-send --host=127.0.0.1 --action="PlayerControl(PartyMode)"'))
+            call(split('xbmc-send --host=127.0.0.1 --action="Action(select)"'))
+            sleep(0.25)
 finally:
     GPIO.cleanup()
