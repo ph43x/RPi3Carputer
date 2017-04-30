@@ -1,69 +1,62 @@
-# Arduino Code
-const int wheelWireIn1 = 
-const int wheelWireIn2 = 
+/*
+ This is some Arduino code to read signals from a 350Z steering
+ wheel control module. So it can then pass a signal to the
+ Raspberry Pi 3 GPIO pins, taking place of the factory head unit
+*/
+int volDown = 23;
+int volUp = 24;
+int seekDown = 25;
+int seekUp = 26;
+int buttonPower = 27;
+int buttonMode = 28;
 
-const int volUp = 
-const int volDown = 
-const int seekUp = 
-const int seekDown = 
-const int mode = 
-const int power = 
-
-const int shortButton = 1000;  #This is either going to work with the present values
-const int lowOhmButton = 600;  #or i'm going to have to set the wire1 and 2 as input 
-const int highOhmButton = 100; #pull_ups and reverse the order of these values.
+int signalWire1 = 19;
+int signalWire2 = 22;
 
 void setup() {
-	pinMode(volUp, OUTPUT); #All the GPIO pins as outputs
-	pinMode(volDown, OUTPUT);
-	pinMode(seekUp, OUTPUT);
-	pinMode(seekDown, OUTPUT);
-	pinMode(mode, OUTPUT);
-	pinMode(power, OUTPUT);
-	Serial.begin(9600);
+  // Setup the buttons with corresponding pins
+  pinMode(signalWire1, INPUT);
+  pinMode(signalWire2, INPUT);
+  pinMode(volDown, OUTPUT);
+  pinMode(volUp, OUTPUT);
+  pinMode(seekDown, OUTPUT);
+  pinMode(seekUp, OUTPUT);
+  pinMode(buttonPower, OUTPUT);
+  pinMode(buttonMode, OUTPUT);
 }
 
-
 void loop() {
-	int wire1 = analogRead(wheelWireIn1); #whiteWire
-	int wire2 = analogRead(wheelWireIn2); #BlueWire probably
-
-	if (wire1 > shortButton) {
-		digitalWrite(power, HIGH);
-		delay(100);
-		digitalWrite(power, LOW);
-	}
-	if (wire1 < shortButton && wire1 > lowOhmButton) {
-		digitalWrite(seekDown, HIGH);
-		delay(100);
-		digitalWrite(seekDown, LOW);
-	}
-	if (wire1 < lowOhmButton && wire1 > highOhmButton) {
-		digitalWrite(volDown, HIGH);
-		delay(100);
-		digitalWrite(volDown, LOW);
-	}
-	if (wire2 > shortButton) {
-		digitalWrite(mode, HIGH);
-		delay(100);
-		digitalWrite(mode, LOW);
-	}
-	if (wire2 < shortButton && wire2 > lowOhmButton) {
-		digitalWrite(seekUp, HIGH);
-		delay(100);
-		digitalWrite(seekUp, LOW);
-	}
-	if (wire2 < lowOhmButton && wire2 > highOhmButton) {
-		digitalWrite(volUp, HIGH);
-		delay(100);
-		digitalWrite(volUp, LOW);
-	}
-	else {
-		digitalWrite(volUp, LOW);
-		digitalWrite(volDown, LOW);
-		digitalWrite(seekUp, LOW);
-		digitalWrite(seekDown, LOW);
-		digitalWrite(mode, LOW);
-		digitalWrite(power, LOW);
-	}
+  // Now this is the running portion of the program
+  wheelWire1 = analogRead(signalWire1);
+  wheelWire2 = analogRead(signalWire2);
+  if(wheelWire1 > 900){
+    digitalWrite(buttonMode, HIGH);
+  }
+  if(wheelWire1 > 700){
+    digitalWrite(seekUp, HIGH);
+  }
+  if(wheelWire1 > 400){
+    digitalWrite(volUp, HIGH);
+  }
+  else{
+    digitalWrite(volUp, LOW);
+    digitalWrite(seekUp, LOW);
+    digitalWrite(buttonMode, LOW);
+  }
+  
+  if(wheelWire2 > 900){
+    digitalWrite(buttonPower, HIGH);
+  }
+  if(wheelWire2 > 700){
+    digitalWrite(seekDown, HIGH);
+  }
+  if(wheelWire2 > 400){
+    digitalWrite(volDown, HIGH);
+  }
+  else{
+    digitalWrite(volDown, LOW);
+    digitalWrite(seekDown, LOW);
+    digitalWrite(buttonPower, LOW);
+  }
+  delay(100);
 }
