@@ -32,10 +32,10 @@ void loop() {
   if(wheelWire1 > 900){
     digitalWrite(buttonMode, HIGH);
   }
-  if(wheelWire1 > 700){
+  if((wheelWire1 > 600) && (wheelWire1 < 900)){
     digitalWrite(seekUp, HIGH);
   }
-  if(wheelWire1 > 400){
+  if((wheelWire1 > 200) && (wheelWire1 < 600)){
     digitalWrite(volUp, HIGH);
   }
   else{
@@ -47,10 +47,10 @@ void loop() {
   if(wheelWire2 > 900){
     digitalWrite(buttonPower, HIGH);
   }
-  if(wheelWire2 > 700){
+  if((wheelWire2 > 600) && (wheelWire2 < 900)){
     digitalWrite(seekDown, HIGH);
   }
-  if(wheelWire2 > 400){
+  if((wheelWire2 > 200) && (wheelWire2 < 600)){
     digitalWrite(volDown, HIGH);
   }
   else{
