@@ -13,7 +13,7 @@ import datetime
 # sees it. After the pins I have values for volume, if mode is pressed, and
 # the time it was pressed
 GPIO.setmode(GPIO.BOARD)
-turnoff = 31
+turnoff = 16
 volDown = 38
 volUp = 36
 seekDown = 37
