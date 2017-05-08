@@ -14,11 +14,11 @@ import datetime
 # the time it was pressed
 GPIO.setmode(GPIO.BOARD)
 turnoff = 16
-volDown = 38
+volDown = 33
 volUp = 36
-seekDown = 37
-seekUp = 35
-buttonPower = 33
+seekDown = 35
+seekUp = 38
+buttonPower = 37
 buttonMode = 40
 currentVolume = 50
 modePressed = 0
