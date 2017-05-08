@@ -28,8 +28,8 @@ void setup() {
 
 void loop() {
   // Now this is the running portion of the program
-  wheelWire1 = analogRead(signalWire1);
-  wheelWire2 = analogRead(signalWire2);
+  int wheelWire1 = analogRead(signalWire1);
+  int wheelWire2 = analogRead(signalWire2);
   if(wheelWire1 > 900){
     digitalWrite(buttonMode, HIGH);
   }
