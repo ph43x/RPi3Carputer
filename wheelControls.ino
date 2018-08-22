@@ -7,6 +7,10 @@
 int signalWire1 = 19;
 int signalWire2 = 22;
 
+int buttonState = LOW;
+long lastDebounceTime = 0;
+long debounceDelay = 50;   //time in ms of how long to wait before confirm
+
 void setup() {
 /* 
   Set baud rate and wheel buttons with corresponding pins
@@ -25,23 +29,32 @@ void loop() {
   // Also I need to put in some debounce logic to prevent false positives
   int wire1 = map(analogRead(signalWire1), 0, 1023, 0, 255);
   int wire2 = map(analogRead(signalWire2), 0, 1023, 0, 255);
-  if (wire1 >= 128) {
-    Serial.println(103);
-  }
-  if ((wire1 < 128) && (wire1 > 25)) {
-    Serial.println(102);
-  }
-  if ((wire1 < 25) && (wire1 > 0)) {
-    Serial.println(101);
-  }
-  if (wire2 >= 128) {
-    Serial.println(203);
-  }
-  if ((wire2 < 128) && (wire2 > 25)) {
-    Serial.println(202);
-  }
-  if ((wire2 < 25) && (wire2 > 0)) {
-    Serial.println(201);
+  if ( (millis() - lastDebounceTime) > debounceDelay) {
+   
+    if (wire1 >= 128) {
+      Serial.println(103);
+      lastDebounceTime = millis();
+    }
+    if ((wire1 < 128) && (wire1 > 25)) {
+      Serial.println(102);
+      lastDebounceTime = millis();
+    }
+    if ((wire1 < 25) && (wire1 > 0)) {
+      Serial.println(101);
+      lastDebounceTime = millis();
+    }
+    if (wire2 >= 128) {
+      Serial.println(203);
+      lastDebounceTime = millis();
+    }
+    if ((wire2 < 128) && (wire2 > 25)) {
+      Serial.println(202);
+      lastDebounceTime = millis();
+    }
+    if ((wire2 < 25) && (wire2 > 0)) {
+      Serial.println(201);
+      lastDebounceTime = millis();
+    }
   }
   delay(10);
 }
