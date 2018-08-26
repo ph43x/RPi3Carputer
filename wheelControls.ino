@@ -6,6 +6,8 @@
 
 int signalWire1 = 19;
 int signalWire2 = 22;
+float wire1 = 0;
+float wire2 = 0;
 
 int buttonState = LOW;
 long lastDebounceTime = 0;
@@ -24,11 +26,23 @@ void setup() {
 }
 
 void loop() {
-  // I decided to use values that could be sent in one byte and
-  // that would indicate which wire sent the signal and what button
-  // Also I need to put in some debounce logic to prevent false positives
-  int wire1 = map(analogRead(signalWire1), 0, 1023, 0, 255);
-  int wire2 = map(analogRead(signalWire2), 0, 1023, 0, 255);
+  /*
+  Little known issue when using multiple ADC readings on the same board
+  Take the reading twice, due to the multiplexer switching to the other
+  circuit creating a false reading, 10ms has been tested to be an acceptable
+  delay for the internal capacitors to drain for a clear reading.
+  */
+  wire1 = analogRead(signalWire1);
+  delay(10);
+  wire1 = analogRead(signalWire1);
+  delay(10);
+  wire2 = analogRead(signalWire2);
+  delay(10);
+  wire2 = analogRead(signalWire2);
+  delay(10);
+  
+ // With the new logic of reading the ADC, unsure if deboucne logic is needed.
+ // Will leave in for now and test each scenario
   if ( (millis() - lastDebounceTime) > debounceDelay) {
    
     if (wire1 >= 128) {
@@ -55,6 +69,10 @@ void loop() {
       Serial.println(201);
       lastDebounceTime = millis();
     }
+// Comment the two next lines when done debugging
+    Serial.println(wire1);
+    Serial.println(wire2);
   }
-  delay(10);
+// Comment the next line when done debugging
+  delay(1000);
 }
