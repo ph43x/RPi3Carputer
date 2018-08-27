@@ -1,3 +1,4 @@
+## Not used due to Serial communication between Arduino and RPi3 over USB
 #! /usr/bin/python
 
 # Steering Wheel Controls
