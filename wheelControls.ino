@@ -4,9 +4,10 @@
  So it can then pass a signal to the RPi3 usb port, via serial connection
 */
 
-int carAcc = 32;    // Comment out for testing with car being off 1/4
+//int carAcc = 32;    // Comment out for testing with car being off 1/4
 int signalWire1 = A6;
 int signalWire2 = A7;
+int sentShutdown = 0;
 float wire1 = 0;
 float wire2 = 0;
 
@@ -23,7 +24,7 @@ void setup() {
   Serial.begin(9600);
   pinMode(signalWire1, INPUT);
   pinMode(signalWire2, INPUT);
-  pinMode(carAcc, INPUT);     // Comment out for testing with car being off 2/4
+  //pinMode(carAcc, INPUT);     // Comment out for testing with car being off 2/4
 }
 
 void loop() {
@@ -33,20 +34,37 @@ void loop() {
     circuit creating a false reading, 10ms has been tested to be an acceptable
     delay for the internal capacitors to drain for a clear reading.
     */
-  while (digitalRead(carAcc) == HIGH) { // Comment out for testing with car being off 3/4
-
-    wire1 = analogRead(signalWire1);
+  /*
+  // Comment out for testing with car being off --start 3.5/5
+  // This portion identifies that the shutdown signal has not been sent
+  // and the ignition is now off
+  if ((sentShutdown = 0) && (digitalRead(carAcc) == LOW)) {
+    Serial.println(111);
+    sentShutdown = 1;
+    }
+  // Ok now we need to be able to send the startup signal when car is on
+  if ((sentShutdown = 1) && (digitalRead(carAcc) == HIGH)) {
+    Serial.println(222);
+    sentShutdown = 0;
+  }
+  
+  // This statement after understands the startup signal has been sent and the car is on
+  if ((digitalRead(carAcc) == HIGH) && sentShutdown == 0) {
+  */ // Comment out for testing with car being off --end 4/5
+  
+    wire1 = analogRead(signalWire1) * (5.0 / 1023.0);
     delay(10);
-    wire1 = analogRead(signalWire1);
+    wire1 = analogRead(signalWire1) * (5.0 / 1023.0);
     delay(10);
-    wire2 = analogRead(signalWire2);
+    wire2 = analogRead(signalWire2) * (5.0 / 1023.0);
     delay(10);
-    wire2 = analogRead(signalWire2);
+    wire2 = analogRead(signalWire2) * (5.0 / 1023.0);
     delay(10);
     
     // With the new logic of reading the ADC, unsure if deboucne logic is needed.
     // Will leave in for now and test each scenario
-    
+
+
     if ((millis() - lastDebounceTime) > debounceDelay) {
      
       if ((wire1 < 800) && (wire1 >= 128)) {
@@ -80,5 +98,5 @@ void loop() {
     }
   // Comment the next line when done debugging 2/2
     delay(500);
-  } // Comment out for testing with car being off 4/4
+  //} // Comment out for testing with car being off 5/5
 }
