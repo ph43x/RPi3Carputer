@@ -73,11 +73,12 @@ void loop() {
         Serial.println(201);
         lastDebounceTime = millis();
       }
-  // Comment the two next lines when done debugging 1/2
-      Serial.println(wire1);
+  // Comment the next three lines when done debugging 1/2
+      Serial.print(wire1);
+      Serial.print(" ");
       Serial.println(wire2);
     }
   // Comment the next line when done debugging 2/2
-    delay(1000);
+    delay(500);
   } // Comment out for testing with car being off 4/4
 }
