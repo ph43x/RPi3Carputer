@@ -1,8 +1,7 @@
-## Not used due to Serial communication between Arduino and RPi3 over USB
 #! /usr/bin/python
 
 # Steering Wheel Controls
-# Read inputs from Arduino
+# Read inputs from Arduino via serial over USB
 
 import time
 import RPi.GPIO as GPIO
@@ -54,25 +53,27 @@ if ardPort.isOpen():
 
     # Wire 1: Short: Mode,  165 ohms: Volume Up,   652 ohms: Seek Up
     # Wire 2: Short: Power, 165 ohms: Volume Down, 652 ohms: Seek Down
-        if (modeTimePressed - time.time.now()
+        if (modeTimePressed - time.time.now()) > 60:
+            modePressed = 0
         if 101 in readArd: # Button -- Mode 
-            if lastPressed is 101 and pressedTime > (modeTimePressed - time.time.now()):
+            # This checks how long the button 
+            if lastPressed is 101 and pressedTime > (lastTimePressed - time.time.now()): 
                 modePressed = 1
-                modeTimePressed = time.time.now()
-
+                modeTimePressed = time.time.now() 
+            if (int(firstTimePressed) - int(lastTimePressed)) > pressedTime
 
             else:
                 lastPressed = 101
+
+                firstTimePressed = 
                 lastTimePressed = time.time.now()
 
         if 102 in readArd: # Button -- Volume Up
-            if lastPressed is 102 and pressedTime > (lastTimePressed - time.time.now()):
-                
-                lastTimePressed = time.time.now()
-
+            if lastPressed is 102 and pressedTime > (lastTimePressed - time.time.now()): 
+                modePressed = 1
+                modeTimePressed = time.time.now() 
             else:
                 lastPressed = 102
-
                 lastTimePressed = time.time.now()
 
         if 103 in readArd: # Button -- Seek Up
