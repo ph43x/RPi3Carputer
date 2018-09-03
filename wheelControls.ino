@@ -52,13 +52,13 @@ void loop() {
   if ((digitalRead(carAcc) == HIGH) && sentShutdown == 0) {
   */ // Comment out for testing with car being off --end 4/5
   
-    wire1 = analogRead(signalWire1) * (5.0 / 1023.0);
+    wire1 = analogRead(signalWire1);
     delay(10);
-    wire1 = analogRead(signalWire1) * (5.0 / 1023.0);
+    wire1 = analogRead(signalWire1);
     delay(10);
-    wire2 = analogRead(signalWire2) * (5.0 / 1023.0);
+    wire2 = analogRead(signalWire2);
     delay(10);
-    wire2 = analogRead(signalWire2) * (5.0 / 1023.0);
+    wire2 = analogRead(signalWire2);
     delay(10);
     
     // With the new logic of reading the ADC, unsure if deboucne logic is needed.
@@ -67,28 +67,28 @@ void loop() {
 
     if ((millis() - lastDebounceTime) > debounceDelay) {
      
-      if ((wire1 < 800) && (wire1 >= 128)) {
-        Serial.println(103);
+      if ((wire1 < 300) && (wire1 >= 55)) {
+        Serial.println(103); //volup
         lastDebounceTime = millis();
       }
-      if ((wire1 < 128) && (wire1 >= 25)) {
-        Serial.println(102);
+      if ((wire1 < 55) && (wire1 >= 11)) {
+        Serial.println(102); // seekup
         lastDebounceTime = millis();
       }
-      if ((wire1 < 25) && (wire1 >= 0)) {
+      if ((wire1 < 10) && (wire1 >= 0)) { //mode
         Serial.println(101);
         lastDebounceTime = millis();
       }
-      if ((wire2 < 800) && (wire2 >= 128)) {
-        Serial.println(203);
+      if ((wire2 < 300) && (wire2 >= 55)) {
+        Serial.println(203); // voldown
         lastDebounceTime = millis();
       }
-      if ((wire2 < 128) && (wire2 >= 25)) {
-        Serial.println(202);
+      if ((wire2 < 55) && (wire2 >= 11)) {
+        Serial.println(202); //seekdown
         lastDebounceTime = millis();
       }
-      if ((wire2 < 25) && (wire2 >= 0)) {
-        Serial.println(201);
+      if ((wire2 < 10) && (wire2 >= 0)) {
+        Serial.println(201); // power
         lastDebounceTime = millis();
       }
   // Comment the next three lines when done debugging 1/2
@@ -97,6 +97,6 @@ void loop() {
       Serial.println(wire2);
     }
   // Comment the next line when done debugging 2/2
-    delay(500);
+    delay(200);
   //} // Comment out for testing with car being off 5/5
 }
