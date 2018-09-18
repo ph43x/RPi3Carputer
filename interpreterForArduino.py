@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/python3
 
 # Steering Wheel Controls
 # Read inputs from Arduino via serial over USB
