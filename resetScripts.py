@@ -5,6 +5,7 @@
 ###  one nameserver daemon that are supposed to be running
 #############################################################
 
+import os
 import shlex
 from subprocess import call
 

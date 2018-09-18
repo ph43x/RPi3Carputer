@@ -4,6 +4,7 @@
 ###  This just goes to the two git repos and does a pull
 #############################################################
 
+import os
 import shlex
 from subprocess import call
 
