@@ -1,0 +1,15 @@
+gpu_mem_1024=256  
+hdmi_ignore_cec_init=1  
+disable_overscan=1
+start_x=1  
+disable_splash=1
+gpu_mem_256=112  
+dtoverlay=hifiberry-dacplus-overlay  
+dtoverlay=i2c-rtc,ds1307
+dtparam=i2c_arm=on
+sdtv_aspect=1  
+gpu_mem_512=144  
+dtparam=audio=off  
+arm_freq=1200
+core_freq=400
+sdram_freq=400
