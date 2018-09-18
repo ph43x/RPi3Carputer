@@ -7,3 +7,4 @@ cd /home/osmc/git/PythonScripting/
 git pull origin master
 
 echo "Done"
+exit
