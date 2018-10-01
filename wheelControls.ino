@@ -97,7 +97,7 @@ void loop() {
      
       if ((wire1 < 300) && (wire1 >= 55)) {
         while (digitalRead(activeWire1) == LOW) {
-          //i = i + 1; 
+          //i = i + 1; // comment out to negate long press
           if (i >= 20){
             Serial.println(113); //volUpLong
             i = 0;
@@ -167,15 +167,17 @@ void loop() {
 
       if ((wire2 < 300) && (wire2 >= 55)) {
         while (digitalRead(activeWire2) == LOW) {
-          i = i + 1;
+          //i = i + 1; // comment out to negate long press
           if (i >= 20){
             Serial.println(213); //voldownLong
             i = 0;
             lastDebounceTime = millis();
             break;
           }
-          delay(100);
+          Serial.println(203); //voldown
+          delay(250);
         }
+        /* // Comment out, if you have use for long Volume press
         if (i >= 20){
           Serial.println(213); //voldownLong
           i = 0;
@@ -184,6 +186,7 @@ void loop() {
           Serial.println(203); //voldown
           i = 0;
         }
+        */
         lastDebounceTime = millis();
       }
 
