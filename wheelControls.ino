@@ -58,6 +58,30 @@ void loop() {
     tempResume = 0;
   }
 
+  /*
+    I realize that longPowerPressed would never get set if it's behind the main if
+    So i created this little thing to just check if the power is held down for 2 sec
+  */
+  if ((sentShutdown == 1) && (digitalRead(carAcc) == LOW) && (tempResume == 1)){
+    wire2 = analogRead(signalWire2);
+    delay(10);
+    wire2 = analogRead(signalWire2);
+  
+    if ((wire2 < 10) && (wire2 >= 0)) {
+      while (digitalRead(activeWire2) == LOW) {
+        i = i + 1;
+        if (i >= 20){
+          Serial.println(211); //powerLong
+          i = 0;
+          longPowerPressed = 1;
+          lastDebounceTime = millis();
+          break;
+        }
+        delay(100);
+      }
+      i = 0;
+    }
+  }
   //*
   // Comment out for testing with car being off --start 3.5/5
   // This portion identifies that the shutdown signal has not been sent
