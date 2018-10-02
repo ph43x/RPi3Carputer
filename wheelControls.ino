@@ -5,9 +5,9 @@
 */
 
 int carAcc = 2;    // Comment out for testing with car being off 1/4
-int activeWire1 = D12;
+int activeWire1 = 12;
 int signalWire1 = A6;
-int activeWire2 = D13;
+int activeWire2 = 13;
 int signalWire2 = A7;
 float wire1 = 0;
 float wire2 = 0;
@@ -48,12 +48,12 @@ void loop() {
     longPowerPressed = 0;
     tempResume = 1;
     }
-  if ((sentShutdown == 1) && (digitalRead(carAcc) == LOW) && (longPowerPressed == 1) && (tempResume == 1) {
+  if ((sentShutdown == 1) && (digitalRead(carAcc) == LOW) && (longPowerPressed == 1) && (tempResume == 1)) {
     Serial.println(100); // Go back asleep
     longPowerPressed = 0;
     tempResume = 0;
     }
-  if ((tempResumeExpire =< millis()) && (tempResume == 1)){
+  if ((tempResumeExpire <= millis()) && (tempResume == 1)){
     Serial.println(100); // 10 minutes have passed sleep again
     tempResume = 0;
   }
@@ -136,7 +136,7 @@ void loop() {
         if (i >= 20){
           Serial.println(113); //volUpLong
           i = 0;
-          }
+        }
         else{
           Serial.println(103); //volUp
           i = 0;
@@ -159,7 +159,7 @@ void loop() {
         if (i >= 20){
           Serial.println(112); //seekUpLong
           i = 0;
-          }
+        }
         else{
           Serial.println(102); //seekUp
           i = 0;
