@@ -59,14 +59,14 @@ while True: #changed from if ardPort.isOpen to while True
                 call(shlex.split('xbmc-send --action="Action(Up)"'))
             else:
                 volumeControl = Pyro4.Proxy("PYRONAME:control.volume")
-                print(volumeControl.volume_control(5))
+                print(volumeControl.adjustVolume(5))
 
         if '112' in ardDecode: # Button -- Volume Up Long
             if modePressed == 1:
                 call(shlex.split('xbmc-send --action="Action(PageUp)"'))
             else:
                 volumeControl = Pyro4.Proxy("PYRONAME:control.volume")
-                print(volumeControl.volume_control(5))
+                print(volumeControl.adjustVolume(5))
     
         if '103' in ardDecode: # Button -- Seek Up
             if modePressed == 1:
@@ -100,14 +100,14 @@ while True: #changed from if ardPort.isOpen to while True
                 call(shlex.split('xbmc-send --action="Action(Down)"'))
             else:
                 volumeControl = Pyro4.Proxy("PYRONAME:control.volume")
-                print(volumeControl.volume_control(-5))
+                print(volumeControl.adjustVolume(-5))
         
         if '212' in ardDecode: # Button -- Volume Down Long
             if modePressed == 1:
                 call(shlex.split('xbmc-send --action="Action(PageDown)"'))
             else:
                 volumeControl = Pyro4.Proxy("PYRONAME:control.volume")
-                print(volumeControl.volume_control(-5))
+                print(volumeControl.adjustVolume(-5))
 
         if '203' in ardDecode: # Button -- Seek Down
             if modePressed == 1:
