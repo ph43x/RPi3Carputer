@@ -83,15 +83,15 @@ while True: #changed from if ardPort.isOpen to while True
             else:
                 call(shlex.split('xbmc-send --action="Action(select)"'))
     
-        if '111' in ardDecode: # The car is off, night night
+        if '100' in ardDecode: # The car is off, night night
             suspendSystem = Pyro4.Proxy("PYRONAME:system.suspend")
-            print(suspendSystem.suspend_system_now(0))
+            print(suspendSystem.suspend_system_now(1))
     
-        if '222' in ardDecode: # The car is on, Wakey Wakey
+        if '200' in ardDecode: # The car is on, Wakey Wakey
             resumeSystem = Pyro4.Proxy("PYRONAME:system.resume")
             print(resumeSystem.resume_system_now(0))
     
-        ardPort.flushInput() #I may or may not need this part
+        #ardPort.flushInput() #I may or may not need this part
     
     except OSError as err:
         print("OS error: {0}".format(err))
