@@ -13,10 +13,7 @@ import Pyro4
 # GPIO.setmode(GPIO.BOARD) # Add later with more features
 currentVolume = 50
 modePressed = 0
-modeStart = 0
 modeFinish = 0
-pressedTime = 2
-lastPressed = 0
 
 # Enable anything to be able to read the arduino usb
 call(shlex.split('sudo chmod 777 /dev/ttyUSB0'))
@@ -37,51 +34,92 @@ while True: #changed from if ardPort.isOpen to while True
             # Ok, I wanted a function button so Mode will be it, it will auto
             # turn off after 1 minute or if pressed again within that time.
             # This will allow other buttons to have improved functionality
+            ## Or, I just made short and long press functionality, now I have more buttons
+            ## than I know what to do with at this point.
         if '101' in ardDecode: # Button -- Mode 
-        # This checks how long the button
             if modePressed == 0:
                 modePressed = 1
-                modeStart = time.time()
-                modeFinish = modeStart + 60
-                call(shlex.split('xbmc-send --action="ActivateWindow(favourites)"'))
-                call(shlex.split('xbmc-send --action="Action(select)"'))
+                modeFinish = time.time() + 60
+                call(shlex.split('xbmc-send --action="ActivateWindow(fileManager,sources://music/)"'))
             if modePressed == 1:
                 modePressed = 0
                 call(shlex.split('xbmc-send --action="ActivateWindow(home)"'))
-    
-        if '102' in ardDecode: # Button -- Volume Up
+        
+        if '111' in ardDecode: # Button -- ModeLong
             if modePressed == 0:
-                call(shlex.split('xbmc-send --action="Action(up)"'))
+                modePressed = 1
+                modeFinish = time.time() + 60
+                call(shlex.split('xbmc-send --action="ActivateWindow(fileManager,sources://music/)"'))
+            if modePressed == 1:
+                modePressed = 0
+                call(shlex.split('xbmc-send --action="ActivateWindow(home)"'))
+
+        if '102' in ardDecode: # Button -- Volume Up
+            if modePressed == 1:
+                call(shlex.split('xbmc-send --action="Action(Up)"'))
             else:
-                videoControl = Pyro4.Proxy("PYRONAME:control.volume")
-                print(videoControl.volume_control(5))
+                volumeControl = Pyro4.Proxy("PYRONAME:control.volume")
+                print(volumeControl.volume_control(5))
+
+        if '112' in ardDecode: # Button -- Volume Up Long
+            if modePressed == 1:
+                call(shlex.split('xbmc-send --action="Action(PageUp)"'))
+            else:
+                volumeControl = Pyro4.Proxy("PYRONAME:control.volume")
+                print(volumeControl.volume_control(5))
     
         if '103' in ardDecode: # Button -- Seek Up
-            if modePressed == 0:
+            if modePressed == 1:
+                call(shlex.split('xbmc-send --action="Action(Left)"'))
+            else:
                 call(shlex.split('xbmc-send --action="PlayerControl(Next)"'))
-            else:
-                call(shlex.split('xbmc-send --action="Action(ParentDir)"'))
     
-        if '201' in ardDecode: # Button -- Power
-            if modePressed == 0:
-                call(shlex.split('xbmc-send --action="PlayerControl(Play)"'))
+        if '113' in ardDecode: # Button -- Seek Up Long
+            if modePressed == 1:
+                call(shlex.split('xbmc-send --action="Action(Left)"'))
             else:
+                call(shlex.split('xbmc-send --action="PlayerControl(Seek(15))"'))
+
+
+        if '201' in ardDecode: # Button -- Power
+            if modePressed == 1:
                 call(shlex.split('xbmc-send --action="PlayerControl(PartyMode)"'))
                 sleep(0.2)
                 call(shlex.split('xbmc-send --action="Action(select)"'))
-                
+            else:
+                call(shlex.split('xbmc-send --action="PlayerControl(Play)"'))
+
+        if '211' in ardDecode: # Button -- Power Long
+            if modePressed == 1:
+                call(shlex.split('xbmc-send --action="Action(Select)"'))
+            else:
+                call(shlex.split('xbmc-send --action="PlayerControl(Play)"'))
+
         if '202' in ardDecode: # Button -- Volume Down
-            if modePressed == 0:
-                call(shlex.split('xbmc-send --action="Action(down)"'))
+            if modePressed == 1:
+                call(shlex.split('xbmc-send --action="Action(Down)"'))
             else:
-                videoControl = Pyro4.Proxy("PYRONAME:control.volume")
-                print(videoControl.volume_control(-5))
-    
+                volumeControl = Pyro4.Proxy("PYRONAME:control.volume")
+                print(volumeControl.volume_control(-5))
+        
+        if '212' in ardDecode: # Button -- Volume Down Long
+            if modePressed == 1:
+                call(shlex.split('xbmc-send --action="Action(PageDown)"'))
+            else:
+                volumeControl = Pyro4.Proxy("PYRONAME:control.volume")
+                print(volumeControl.volume_control(-5))
+
         if '203' in ardDecode: # Button -- Seek Down
-            if modePressed == 0:
-                call(shlex.split('xbmc-send --action="PlayerControl(Previous)"'))
+            if modePressed == 1:
+                call(shlex.split('xbmc-send --action="Action(Right)"'))
             else:
-                call(shlex.split('xbmc-send --action="Action(select)"'))
+                call(shlex.split('xbmc-send --action="PlayerControl(Previous)"'))
+
+        if '213' in ardDecode: # Button -- Seek Down Long
+            if modePressed == 1:
+                call(shlex.split('xbmc-send --action="PlayerControl(PageDown)"'))
+            else:
+                call(shlex.split('xbmc-send --action="PlayerControl(Seek(-15))"'))
     
         if '100' in ardDecode: # The car is off, night night
             suspendSystem = Pyro4.Proxy("PYRONAME:system.suspend")
