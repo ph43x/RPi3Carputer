@@ -62,7 +62,7 @@ void loop() {
     I realize that longPowerPressed would never get set if it's behind the main if
     So i created this little thing to just check if the power is held down for 2 sec
   */
-  if ((sentShutdown == 1) && (digitalRead(carAcc) == LOW) && (tempResume == 1)){
+  if ((sentShutdown == 1) && (digitalRead(carAcc) == LOW) && (tempResume == 0)){
     wire2 = analogRead(signalWire2);
     delay(10);
     wire2 = analogRead(signalWire2);
