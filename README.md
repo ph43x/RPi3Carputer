@@ -1,6 +1,8 @@
 # RPi3Carputer
 Creating a program in python and a couple arduinos to create a replacement head unit for a 2006 350Z using OSMC loaded on a Raspberry Pi 3
 
+Idle power usage is 0.29 amps. 
+
 This is where all the shortcuts show up in your favorites menu
 Kodi 17.6 with CarTouch-PC skin that I'll be tweaking
 #vi ~/.kodi/userdata/favourites.xml
