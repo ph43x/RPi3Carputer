@@ -12,10 +12,7 @@ int signalWire2 = A7;
 float wire1 = 0;
 float wire2 = 0;
 int sentShutdown = 0;
-int longPowerPressed = 0;
 int i = 0;
-int tempResume = 0;
-long tempResumeExpire = 0;
 long lastDebounceTime = 0;
 long debounceDelay = 50;   //time in ms of how long to wait before confirm
 
@@ -35,53 +32,6 @@ void setup() {
 }
 
 void loop() {
-  /* 
-    Here lets be able to identify if the power is held down for 2 seconds then
-    if the car is currently in a sleeping state, lets resume it, and sleep after 10 min
-    just in case.
-  */
-
-  if ((sentShutdown == 1) && (digitalRead(carAcc) == LOW) && (longPowerPressed == 1)) {
-    // Set the number in milli seconds for how long to wait before shutting down
-    tempResumeExpire = (millis() + 600000);  // 10 minutes
-    Serial.println(200); // Wake up for a short time
-    longPowerPressed = 0;
-    tempResume = 1;
-    }
-  if ((sentShutdown == 1) && (digitalRead(carAcc) == LOW) && (longPowerPressed == 1) && (tempResume == 1)) {
-    Serial.println(100); // Go back asleep
-    longPowerPressed = 0;
-    tempResume = 0;
-    }
-  if ((tempResumeExpire <= millis()) && (tempResume == 1)){
-    Serial.println(100); // 10 minutes have passed sleep again
-    tempResume = 0;
-  }
-
-  /*
-    I realize that longPowerPressed would never get set if it's behind the main if
-    So i created this little thing to just check if the power is held down for 2 sec
-  */
-  if ((sentShutdown == 1) && (digitalRead(carAcc) == LOW) && (tempResume == 0)){
-    wire2 = analogRead(signalWire2);
-    delay(10);
-    wire2 = analogRead(signalWire2);
-  
-    if ((wire2 < 10) && (wire2 >= 0)) {
-      while (digitalRead(activeWire2) == LOW) {
-        i = i + 1;
-        if (i >= 20){
-          Serial.println(211); //powerLong
-          i = 0;
-          longPowerPressed = 1;
-          lastDebounceTime = millis();
-          break;
-        }
-        delay(100);
-      }
-      i = 0;
-    }
-  }
   //*
   // Comment out for testing with car being off --start 3.5/5
   // This portion identifies that the shutdown signal has not been sent
@@ -89,19 +39,15 @@ void loop() {
   if ((sentShutdown == 0) && (digitalRead(carAcc) == LOW)) {
     Serial.println(100);
     sentShutdown = 1;
-    tempResume = 0;
     }
   // Ok now we need to be able to send the startup signal when car is on
   if ((sentShutdown == 1) && (digitalRead(carAcc) == HIGH)) {
     Serial.println(200);
     sentShutdown = 0;
-    tempResume = 0;
   }
-  /*
-    This statement after understands the startup signal has been sent and the car is on
-    Or if the car is in tempResume mode
-  */
-  if ((digitalRead(carAcc) == HIGH) && (sentShutdown == 0) || (tempResume == 1)) {
+ 
+  // This statement after understands the startup signal has been sent and the car is on
+  if ((digitalRead(carAcc) == HIGH) && (sentShutdown == 0)) {
   // Comment out for testing with car being off --end 4/5
   
     /*
@@ -121,7 +67,7 @@ void loop() {
      
       if ((wire1 < 300) && (wire1 >= 55)) {
         while (digitalRead(activeWire1) == LOW) {
-          //i = i + 1; // comment out to negate long press
+          i = i + 1; // comment out to negate long press
           if (i >= 20){
             Serial.println(113); //volUpLong
             i = 0;
@@ -132,7 +78,6 @@ void loop() {
           Serial.println(103); //volUp
           delay(250);
         }
-        /* // Comment out, if you have use for long Volume press
         if (i >= 20){
           Serial.println(113); //volUpLong
           i = 0;
@@ -141,7 +86,6 @@ void loop() {
           Serial.println(103); //volUp
           i = 0;
         }
-        */
         lastDebounceTime = millis();
       }
 
@@ -191,7 +135,7 @@ void loop() {
 
       if ((wire2 < 300) && (wire2 >= 55)) {
         while (digitalRead(activeWire2) == LOW) {
-          //i = i + 1; // comment out to negate long press
+          i = i + 1; // comment out to negate long press
           if (i >= 20){
             Serial.println(213); //voldownLong
             i = 0;
@@ -199,9 +143,8 @@ void loop() {
             break;
           }
           Serial.println(203); //voldown
-          delay(250);
+          delay(100);
         }
-        /* // Comment out, if you have use for long Volume press
         if (i >= 20){
           Serial.println(213); //voldownLong
           i = 0;
@@ -210,7 +153,6 @@ void loop() {
           Serial.println(203); //voldown
           i = 0;
         }
-        */
         lastDebounceTime = millis();
       }
 
@@ -242,7 +184,6 @@ void loop() {
           if (i >= 20){
             Serial.println(211); //powerLong
             i = 0;
-            longPowerPressed = 1;
             lastDebounceTime = millis();
             break;
           }
@@ -251,7 +192,6 @@ void loop() {
         }
         if (i >= 20){
           Serial.println(211); //powerLong
-          longPowerPressed = 1;
           i = 0;
           }
         else{
