@@ -127,7 +127,7 @@ void loop() {
           i = 0;
           }
         else{
-          Serial.println(101); //modekUp
+          Serial.println(101); //modeUp
           i = 0;
         }
         lastDebounceTime = millis();
@@ -202,9 +202,14 @@ void loop() {
       }
 
   // Comment the next three lines when done debugging 1/2
-  //  Serial.print(wire1);
-  //  Serial.print(" ");
-  //  Serial.println(wire2);
+    Serial.print("Debug: W1- ");
+    Serial.print(wire1);
+    Serial.print(" W2- ");
+    Serial.print(wire2);
+    Serial.print(" carAcc- ");
+    Serial.print(digitalRead(carAcc));
+    Serial.print(" sS- ");
+    Serial.println(sentShutdown);
     }
   // Comment the next line when done debugging 2/2
   //  delay(200);
