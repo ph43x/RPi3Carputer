@@ -202,18 +202,22 @@ void loop() {
       }
 
   // Comment the next three lines when done debugging 1/2
-    Serial.print("Debug: W1- ");
-    Serial.print(wire1);
-    Serial.print(" W2- ");
-    Serial.print(wire2);
-    Serial.print(" carAcc- ");
-    Serial.print(digitalRead(carAcc));
-    Serial.print(" sS- ");
-    Serial.print(sentShutdown);
-    Serial.print(" aW1- ");
-    Serial.print(digitalRead(activeWire1));
-    Serial.print(" aW2- ");
-    Serial.println(digitalRead(activeWire2));
+     Serial.print("Debug: W1- ");
+     Serial.print(wire1);
+     Serial.print(" W2- ");
+     Serial.print(wire2);
+     Serial.print(" carAcc- ");
+     Serial.print(digitalRead(carAcc));
+     Serial.print(" sS- ");
+     Serial.print(sentShutdown);
+     Serial.print(" aW1- ");
+     Serial.print(digitalRead(activeWire1));
+     Serial.print(" aW2- ");
+     Serial.println(digitalRead(activeWire2));
+     Serial.print("DR1: ");
+     Serial.print(digitalRead(signalWire1));
+     Serial.print(" DR2: ");
+     Serial.println(digitalRead(signalWire2));
     }
   // Comment the next line when done debugging 2/2
   //  delay(200);
