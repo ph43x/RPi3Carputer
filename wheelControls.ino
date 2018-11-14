@@ -209,7 +209,11 @@ void loop() {
     Serial.print(" carAcc- ");
     Serial.print(digitalRead(carAcc));
     Serial.print(" sS- ");
-    Serial.println(sentShutdown);
+    Serial.print(sentShutdown);
+    Serial.print(" aW1- ");
+    Serial.print(digitalRead(activeWire1));
+    Serial.print(" aW2- ");
+    Serial.println(digitalRead(activeWire2));
     }
   // Comment the next line when done debugging 2/2
   //  delay(200);
