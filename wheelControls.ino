@@ -7,9 +7,12 @@
 int carAcc = 2;    // Comment out for testing with car being off 1/4
 int signalWire1 = A6;
 int signalWire2 = A7;
+int signalDRead1 = 19;
+int signalDRead2 = 22;
 float wire1 = 0;
 float wire2 = 0;
 int sentShutdown = 0;
+int testOn = 0;    // Set this value to 1 for testing main loop, 0 otherwise
 int i = 0;
 long lastDebounceTime = 0;
 long debounceDelay = 50;   //time in ms of how long to wait before confirm
@@ -43,7 +46,7 @@ void loop() {
   }
  
   // This statement after understands the startup signal has been sent and the car is on
-  if ((digitalRead(carAcc) == HIGH) && (sentShutdown == 0)) {
+  if ((digitalRead(carAcc) == HIGH) && (sentShutdown == 0) || (testOn == 1)) {
   // Comment out for testing with car being off --end 4/5
   
     /*
@@ -207,9 +210,9 @@ void loop() {
      Serial.print(" sS- ");
      Serial.print(sentShutdown);
      Serial.print(" DR1: ");
-     Serial.print(digitalRead(signalWire1));
+     Serial.print(digitalRead(signalDRead1));
      Serial.print(" DR2: ");
-     Serial.println(digitalRead(signalWire2));
+     Serial.println(digitalRead(signalDRead2));
     }
   // Comment the next line when done debugging 2/2
   //  delay(200);
