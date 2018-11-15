@@ -5,9 +5,7 @@
 */
 
 int carAcc = 2;    // Comment out for testing with car being off 1/4
-int activeWire1 = 12;
 int signalWire1 = A6;
-int activeWire2 = 13;
 int signalWire2 = A7;
 float wire1 = 0;
 float wire2 = 0;
@@ -25,9 +23,7 @@ void setup() {
 */
   Serial.begin(9600);
   pinMode(signalWire1, INPUT);
-  pinMode(activeWire1, INPUT);
   pinMode(signalWire2, INPUT);
-  pinMode(activeWire2, INPUT);
   pinMode(carAcc, INPUT);     // Comment out for testing with car being off 2/4
 }
 
@@ -66,7 +62,7 @@ void loop() {
     if ((millis() - lastDebounceTime) > debounceDelay) {
      
       if ((wire1 < 300) && (wire1 >= 55)) {
-        while (digitalRead(activeWire1) == LOW) {
+        while (digitalRead(signalWire1) == LOW) {
           i = i + 1; // comment out to negate long press
           if (i >= 20){
             Serial.println(113); //volUpLong
@@ -90,7 +86,7 @@ void loop() {
       }
 
       if ((wire1 < 55) && (wire1 >= 11)) {
-        while (digitalRead(activeWire1) == LOW) {
+        while (digitalRead(signalWire1) == LOW) {
           i = i + 1;
           if (i >= 20){
             Serial.println(112); //seekUpLong
@@ -112,7 +108,7 @@ void loop() {
       }
 
       if ((wire1 < 10) && (wire1 >= 0)) {
-        while (digitalRead(activeWire1) == LOW) {
+        while (digitalRead(signalWire1) == LOW) {
           i = i + 1;
           if (i >= 20){
             Serial.println(111); //modeUpLong
@@ -134,7 +130,7 @@ void loop() {
       }
 
       if ((wire2 < 300) && (wire2 >= 55)) {
-        while (digitalRead(activeWire2) == LOW) {
+        while (digitalRead(signalWire2) == LOW) {
           i = i + 1; // comment out to negate long press
           if (i >= 20){
             Serial.println(213); //voldownLong
@@ -157,7 +153,7 @@ void loop() {
       }
 
       if ((wire2 < 55) && (wire2 >= 11)) {
-        while (digitalRead(activeWire2) == LOW) {
+        while (digitalRead(signalWire2) == LOW) {
           i = i + 1;
           if (i >= 20){
             Serial.println(212); //seekdownLong
@@ -179,7 +175,7 @@ void loop() {
       }
 
       if ((wire2 < 10) && (wire2 >= 0)) {
-        while (digitalRead(activeWire2) == LOW) {
+        while (digitalRead(signalWire2) == LOW) {
           i = i + 1;
           if (i >= 20){
             Serial.println(211); //powerLong
@@ -188,7 +184,7 @@ void loop() {
             break;
           }
           delay(100);
-          digitalRead(activeWire2);
+          digitalRead(signalWire2);
         }
         if (i >= 20){
           Serial.println(211); //powerLong
@@ -210,11 +206,7 @@ void loop() {
      Serial.print(digitalRead(carAcc));
      Serial.print(" sS- ");
      Serial.print(sentShutdown);
-     Serial.print(" aW1- ");
-     Serial.print(digitalRead(activeWire1));
-     Serial.print(" aW2- ");
-     Serial.println(digitalRead(activeWire2));
-     Serial.print("DR1: ");
+     Serial.print(" DR1: ");
      Serial.print(digitalRead(signalWire1));
      Serial.print(" DR2: ");
      Serial.println(digitalRead(signalWire2));
