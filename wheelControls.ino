@@ -127,7 +127,7 @@ void loop() {
         //else{
         //  Serial.println(101); //modeUp
         //  i = 0;
-        }
+        //}
         lastDebounceTime = millis();
       }
 
@@ -207,7 +207,7 @@ void loop() {
      Serial.print(" carAcc- ");
      Serial.print(digitalRead(carAcc));
      Serial.print(" sS- ");
-     Serial.print(sentShutdown);
+     Serial.println(sentShutdown);
     }
   // Comment the next line when done debugging 2/2
   //  delay(200);
