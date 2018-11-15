@@ -121,14 +121,15 @@ void loop() {
           delay(100);
         }
         if (i < 20){ // changed from if >= 20 
-          Serial.println(111); //modeUpLong
+          Serial.println(101); //modeUp
           i = 0;
+          lastDebounceTime = millis();
           }
         //else{
         //  Serial.println(101); //modeUp
         //  i = 0;
         //}
-        lastDebounceTime = millis();
+        //lastDebounceTime = millis();
       }
 
       if ((wire2 < 300) && (wire2 >= 55)) {
