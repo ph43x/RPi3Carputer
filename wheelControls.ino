@@ -109,6 +109,7 @@ void loop() {
       }
 
       if ((wire1 < 10) && (wire1 >= 0)) {
+        i = 0;
         while (analogRead(signalWire1) < 300) {
           i = i + 1;
           if (i >= 20){
@@ -119,13 +120,13 @@ void loop() {
           }
           delay(100);
         }
-        if (i >= 20){
+        if (i < 20){ // changed from if >= 20 
           Serial.println(111); //modeUpLong
           i = 0;
           }
-        else{
-          Serial.println(101); //modeUp
-          i = 0;
+        //else{
+        //  Serial.println(101); //modeUp
+        //  i = 0;
         }
         lastDebounceTime = millis();
       }
