@@ -4,15 +4,13 @@
  So it can then pass a signal to the RPi3 usb port, via serial connection
 */
 
-int carAcc = 2;    // Comment out for testing with car being off 1/4
-int signalWire1 = A6;
-int signalWire2 = A7;
-int signalDRead1 = 19;
-int signalDRead2 = 22;
+const int carAcc = 2;    // Comment out for testing with car being off 1/4
+const int signalWire1 = A6; // Well, with testing, it doesn't seem that I can read digitally from an analog pin
+const int signalWire2 = A7;
 float wire1 = 0;
 float wire2 = 0;
 int sentShutdown = 0;
-int testOn = 0;    // Set this value to 1 for testing main loop, 0 otherwise
+int testOn = 1;    // Set this value to 1 for testing main loop, 0 otherwise
 int i = 0;
 long lastDebounceTime = 0;
 long debounceDelay = 50;   //time in ms of how long to wait before confirm
@@ -25,8 +23,8 @@ void setup() {
   Wire 2: Short: Power, 165 ohms: Volume Down, 652 ohms: Seek Down
 */
   Serial.begin(9600);
-  pinMode(signalWire1, INPUT);
-  pinMode(signalWire2, INPUT);
+  pinMode(signalWire1, INPUT_PULLUP);
+  pinMode(signalWire2, INPUT_PULLUP);
   pinMode(carAcc, INPUT);     // Comment out for testing with car being off 2/4
 }
 
@@ -65,7 +63,7 @@ void loop() {
     if ((millis() - lastDebounceTime) > debounceDelay) {
      
       if ((wire1 < 300) && (wire1 >= 55)) {
-        while (digitalRead(signalWire1) == LOW) {
+        while (analogRead(signalWire1) < 300) {
           i = i + 1; // comment out to negate long press
           if (i >= 20){
             Serial.println(113); //volUpLong
@@ -89,7 +87,7 @@ void loop() {
       }
 
       if ((wire1 < 55) && (wire1 >= 11)) {
-        while (digitalRead(signalWire1) == LOW) {
+        while (analogRead(signalWire1) < 300) {
           i = i + 1;
           if (i >= 20){
             Serial.println(112); //seekUpLong
@@ -111,7 +109,7 @@ void loop() {
       }
 
       if ((wire1 < 10) && (wire1 >= 0)) {
-        while (digitalRead(signalWire1) == LOW) {
+        while (analogRead(signalWire1) < 300) {
           i = i + 1;
           if (i >= 20){
             Serial.println(111); //modeUpLong
@@ -133,7 +131,7 @@ void loop() {
       }
 
       if ((wire2 < 300) && (wire2 >= 55)) {
-        while (digitalRead(signalWire2) == LOW) {
+        while (analogRead(signalWire2) < 300) {
           i = i + 1; // comment out to negate long press
           if (i >= 20){
             Serial.println(213); //voldownLong
@@ -156,7 +154,7 @@ void loop() {
       }
 
       if ((wire2 < 55) && (wire2 >= 11)) {
-        while (digitalRead(signalWire2) == LOW) {
+        while (analogRead(signalWire2) < 300) {
           i = i + 1;
           if (i >= 20){
             Serial.println(212); //seekdownLong
@@ -178,7 +176,7 @@ void loop() {
       }
 
       if ((wire2 < 10) && (wire2 >= 0)) {
-        while (digitalRead(signalWire2) == LOW) {
+        while (analogRead(signalWire2) < 300) {
           i = i + 1;
           if (i >= 20){
             Serial.println(211); //powerLong
@@ -209,10 +207,6 @@ void loop() {
      Serial.print(digitalRead(carAcc));
      Serial.print(" sS- ");
      Serial.print(sentShutdown);
-     Serial.print(" DR1: ");
-     Serial.print(digitalRead(signalDRead1));
-     Serial.print(" DR2: ");
-     Serial.println(digitalRead(signalDRead2));
     }
   // Comment the next line when done debugging 2/2
   //  delay(200);
