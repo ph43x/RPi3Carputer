@@ -61,11 +61,11 @@ void loop() {
     if ((millis() - lastDebounceTime) > debounceDelay) {
      
       if ((wire1 < 300) && (wire1 >= 55)) {
+        i = 0;
         while (analogRead(signalWire1) < 300) {
           i = i + 1; // comment out to negate long press
           if (i >= 20){
             Serial.println(113); //volUpLong
-            i = 0;
             delay(500);
             lastDebounceTime = millis();
             break;
@@ -74,17 +74,16 @@ void loop() {
         }
         if (i < 20){
           Serial.println(103); //volUp
-          i = 0;
           lastDebounceTime = millis();
         }
       }
 
       if ((wire1 < 55) && (wire1 >= 11)) {
+        i = 0;
         while (analogRead(signalWire1) < 300) {
           i = i + 1;
           if (i >= 20){
             Serial.println(112); //seekUpLong
-            i = 0;
             lastDebounceTime = millis();
             break;
           }
@@ -92,7 +91,6 @@ void loop() {
         }
         if (i < 20){
           Serial.println(102); //seekUp
-          i = 0;
           lastDebounceTime = millis();
         }
       }
@@ -103,7 +101,6 @@ void loop() {
           i = i + 1;
           if (i >= 20){
             Serial.println(111); //modeUpLong
-            i = 0;
             lastDebounceTime = millis();
             break;
           }
@@ -111,17 +108,16 @@ void loop() {
         }
         if (i < 20){
           Serial.println(101); //modeUp
-          i = 0;
           lastDebounceTime = millis();
           }
       }
 
       if ((wire2 < 300) && (wire2 >= 55)) {
+        i = 0;
         while (analogRead(signalWire2) < 300) {
           i = i + 1; // comment out to negate long press
           if (i >= 20){
             Serial.println(213); //voldownLong
-            i = 0;
             lastDebounceTime = millis();
             break;
           }
@@ -129,17 +125,16 @@ void loop() {
         }
         if (i < 20){
           Serial.println(203); //voldown
-          i = 0;
           lastDebounceTime = millis();
           }
       }
 
       if ((wire2 < 55) && (wire2 >= 11)) {
+        i = 0;
         while (analogRead(signalWire2) < 300) {
           i = i + 1;
           if (i >= 20){
             Serial.println(212); //seekdownLong
-            i = 0;
             lastDebounceTime = millis();
             break;
           }
@@ -147,17 +142,16 @@ void loop() {
         }
         if (i < 20){
           Serial.println(202); //seekdown
-          i = 0;
           lastDebounceTime = millis();
           }
       }
 
       if ((wire2 < 10) && (wire2 >= 0)) {
+        i = 0;
         while (analogRead(signalWire2) < 300) {
           i = i + 1;
           if (i >= 20){
             Serial.println(211); //powerLong
-            i = 0;
             lastDebounceTime = millis();
             break;
           }
@@ -165,7 +159,6 @@ void loop() {
         }
         if (i < 20){
           Serial.println(201); //power
-          i = 0;
           lastDebounceTime = millis();
           }
       }
