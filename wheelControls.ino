@@ -1,12 +1,16 @@
 /*
+ This code can probably be written better with the use of functions, but for now...
  This is the new Arduino code to replace 'steeringWheelControls.ino'
  It read signals from a 350Z steering wheel control module. 
  So it can then pass a signal to the RPi3 usb port, via serial connection
+ The 350Z wheel controls work off of two wires with 3 buttons each
+ Wire 1: Short: Mode,  165 ohms: Volume Up,   652 ohms: Seek Up,   Color: Green
+ Wire 2: Short: Power, 165 ohms: Volume Down, 652 ohms: Seek Down, Color: Yellow
 */
 
-const int carAcc = 2;    // Comment out for testing with car being off 1/4
-const int signalWire1 = A6; // Well, with testing, it doesn't seem that I can read digitally from an analog pin
-const int signalWire2 = A7;
+const int carAcc = 2;
+const int signalWire1 = A6; // Well, with testing, I can't use digitalRead on an analog pin
+const int signalWire2 = A7; // So I just created the while loop for when the voltage reading is lowish
 float wire1 = 0;
 float wire2 = 0;
 int sentShutdown = 0;
@@ -16,21 +20,15 @@ long lastDebounceTime = 0;
 long debounceDelay = 50;   //time in ms of how long to wait before confirm
 
 void setup() {
-/* 
-  Set baud rate and wheel buttons with corresponding pins
-  The 350Z wheel controls work off of two wires with 3 buttons each
-  Wire 1: Short: Mode,  165 ohms: Volume Up,   652 ohms: Seek Up
-  Wire 2: Short: Power, 165 ohms: Volume Down, 652 ohms: Seek Down
-*/
+  // Set baud rate, wheel buttons, and vehicle Accessory with corresponding pins
+  
   Serial.begin(9600);
   pinMode(signalWire1, INPUT_PULLUP);
   pinMode(signalWire2, INPUT_PULLUP);
-  pinMode(carAcc, INPUT);     // Comment out for testing with car being off 2/4
+  pinMode(carAcc, INPUT);
 }
 
 void loop() {
-  //*
-  // Comment out for testing with car being off --start 3.5/5
   // This portion identifies that the shutdown signal has not been sent
   // and the ignition is now off
   if ((sentShutdown == 0) && (digitalRead(carAcc) == LOW)) {
@@ -44,8 +42,8 @@ void loop() {
   }
  
   // This statement after understands the startup signal has been sent and the car is on
+  // testOn variable is used here to test when outside of the car
   if ((digitalRead(carAcc) == HIGH) && (sentShutdown == 0) || (testOn == 1)) {
-  // Comment out for testing with car being off --end 4/5
   
     /*
       Little known issue when using multiple ADC readings on the same board
@@ -72,18 +70,13 @@ void loop() {
             lastDebounceTime = millis();
             break;
           }
-          Serial.println(103); //volUp
           delay(250);
         }
-        if (i >= 20){
-          Serial.println(113); //volUpLong
-          i = 0;
-        }
-        else{
+        if (i < 20){
           Serial.println(103); //volUp
           i = 0;
+          lastDebounceTime = millis();
         }
-        lastDebounceTime = millis();
       }
 
       if ((wire1 < 55) && (wire1 >= 11)) {
@@ -97,15 +90,11 @@ void loop() {
           }
           delay(100);
         }
-        if (i >= 20){
-          Serial.println(112); //seekUpLong
-          i = 0;
-        }
-        else{
+        if (i < 20){
           Serial.println(102); //seekUp
           i = 0;
+          lastDebounceTime = millis();
         }
-        lastDebounceTime = millis();
       }
 
       if ((wire1 < 10) && (wire1 >= 0)) {
@@ -120,16 +109,11 @@ void loop() {
           }
           delay(100);
         }
-        if (i < 20){ // changed from if >= 20 
+        if (i < 20){
           Serial.println(101); //modeUp
           i = 0;
           lastDebounceTime = millis();
           }
-        //else{
-        //  Serial.println(101); //modeUp
-        //  i = 0;
-        //}
-        //lastDebounceTime = millis();
       }
 
       if ((wire2 < 300) && (wire2 >= 55)) {
@@ -141,18 +125,13 @@ void loop() {
             lastDebounceTime = millis();
             break;
           }
-          Serial.println(203); //voldown
           delay(100);
         }
-        if (i >= 20){
-          Serial.println(213); //voldownLong
-          i = 0;
-          }
-        else{
+        if (i < 20){
           Serial.println(203); //voldown
           i = 0;
-        }
-        lastDebounceTime = millis();
+          lastDebounceTime = millis();
+          }
       }
 
       if ((wire2 < 55) && (wire2 >= 11)) {
@@ -166,15 +145,11 @@ void loop() {
           }
           delay(100);
         }
-        if (i >= 20){
-          Serial.println(212); //seekdownLong
-          i = 0;
-          }
-        else{
+        if (i < 20){
           Serial.println(202); //seekdown
           i = 0;
-        }
-        lastDebounceTime = millis();
+          lastDebounceTime = millis();
+          }
       }
 
       if ((wire2 < 10) && (wire2 >= 0)) {
@@ -187,20 +162,15 @@ void loop() {
             break;
           }
           delay(100);
-          digitalRead(signalWire2);
         }
-        if (i >= 20){
-          Serial.println(211); //powerLong
-          i = 0;
-          }
-        else{
+        if (i < 20){
           Serial.println(201); //power
           i = 0;
-        }
-        lastDebounceTime = millis();
+          lastDebounceTime = millis();
+          }
       }
 
-  // Comment the next three lines when done debugging 1/2
+  // Comment the following print lines when done debugging
      Serial.print("Debug: W1- ");
      Serial.print(wire1);
      Serial.print(" W2- ");
@@ -210,7 +180,5 @@ void loop() {
      Serial.print(" sS- ");
      Serial.println(sentShutdown);
     }
-  // Comment the next line when done debugging 2/2
-  //  delay(200);
-  } // Comment out for testing with car being off 5/5
+  }
 }
