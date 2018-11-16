@@ -21,11 +21,28 @@ long debounceDelay = 50;   //time in ms of how long to wait before confirm
 
 void setup() {
   // Set baud rate, wheel buttons, and vehicle Accessory with corresponding pins
-  
   Serial.begin(9600);
   pinMode(signalWire1, INPUT_PULLUP);
   pinMode(signalWire2, INPUT_PULLUP);
   pinMode(carAcc, INPUT);
+}
+
+void buttonPress(int sendVal, int sendWire){
+  i = 0;
+  while (analogRead(sendWire) < 300){
+    i = i + 1;
+    if (i >= 20){
+      sendVal = sendVal + 10;
+      Serial.println(sendVal);
+      lastDebounceTime = millis();
+      break;
+    }
+    delay(100);
+  }
+  if (i < 20){
+    Serial.println(sendVal);
+    lastDebounceTime = millis();
+  }
 }
 
 void loop() {
@@ -44,7 +61,6 @@ void loop() {
   // This statement after understands the startup signal has been sent and the car is on
   // testOn variable is used here to test when outside of the car
   if ((digitalRead(carAcc) == HIGH) && (sentShutdown == 0) || (testOn == 1)) {
-  
     /*
       Little known issue when using multiple ADC readings on the same board
       Take the reading twice, due to the multiplexer switching to the other
@@ -59,108 +75,28 @@ void loop() {
     wire2 = analogRead(signalWire2);
 
     if ((millis() - lastDebounceTime) > debounceDelay) {
-     
       if ((wire1 < 300) && (wire1 >= 55)) {
-        i = 0;
-        while (analogRead(signalWire1) < 300) {
-          i = i + 1; // comment out to negate long press
-          if (i >= 20){
-            Serial.println(113); //volUpLong
-            delay(500);
-            lastDebounceTime = millis();
-            break;
-          }
-          delay(250);
-        }
-        if (i < 20){
-          Serial.println(103); //volUp
-          lastDebounceTime = millis();
-        }
+        buttonPress(103, signalWire1); // Volume Up
       }
 
       if ((wire1 < 55) && (wire1 >= 11)) {
-        i = 0;
-        while (analogRead(signalWire1) < 300) {
-          i = i + 1;
-          if (i >= 20){
-            Serial.println(112); //seekUpLong
-            lastDebounceTime = millis();
-            break;
-          }
-          delay(100);
-        }
-        if (i < 20){
-          Serial.println(102); //seekUp
-          lastDebounceTime = millis();
-        }
+        buttonPress(102, signalWire1); // Seek Up
       }
 
       if ((wire1 < 10) && (wire1 >= 0)) {
-        i = 0;
-        while (analogRead(signalWire1) < 300) {
-          i = i + 1;
-          if (i >= 20){
-            Serial.println(111); //modeUpLong
-            lastDebounceTime = millis();
-            break;
-          }
-          delay(100);
-        }
-        if (i < 20){
-          Serial.println(101); //modeUp
-          lastDebounceTime = millis();
-          }
+        buttonPress(101, signalWire1); // Mode
       }
 
       if ((wire2 < 300) && (wire2 >= 55)) {
-        i = 0;
-        while (analogRead(signalWire2) < 300) {
-          i = i + 1; // comment out to negate long press
-          if (i >= 20){
-            Serial.println(213); //voldownLong
-            lastDebounceTime = millis();
-            break;
-          }
-          delay(100);
-        }
-        if (i < 20){
-          Serial.println(203); //voldown
-          lastDebounceTime = millis();
-          }
+        buttonPress(203, signalWire2); // Volume Down
       }
 
       if ((wire2 < 55) && (wire2 >= 11)) {
-        i = 0;
-        while (analogRead(signalWire2) < 300) {
-          i = i + 1;
-          if (i >= 20){
-            Serial.println(212); //seekdownLong
-            lastDebounceTime = millis();
-            break;
-          }
-          delay(100);
-        }
-        if (i < 20){
-          Serial.println(202); //seekdown
-          lastDebounceTime = millis();
-          }
+        buttonPress(202, signalWire2); // Seek Down
       }
 
       if ((wire2 < 10) && (wire2 >= 0)) {
-        i = 0;
-        while (analogRead(signalWire2) < 300) {
-          i = i + 1;
-          if (i >= 20){
-            Serial.println(211); //powerLong
-            lastDebounceTime = millis();
-            break;
-          }
-          delay(100);
-        }
-        if (i < 20){
-          Serial.println(201); //power
-          lastDebounceTime = millis();
-          }
+        buttonPress(201, signalWire2); // Power
       }
 
   // Comment the following print lines when done debugging
