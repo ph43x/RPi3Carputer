@@ -1,13 +1,11 @@
 /*
- This code can probably be written better with the use of functions, but for now...
- This is the new Arduino code to replace 'steeringWheelControls.ino'
+ This is the new-new Arduino code to replace 'steeringWheelControls.ino'
  It read signals from a 350Z steering wheel control module. 
  So it can then pass a signal to the RPi3 usb port, via serial connection
  The 350Z wheel controls work off of two wires with 3 buttons each
  Wire 1: Short: Mode,  165 ohms: Volume Up,   652 ohms: Seek Up,   Color: Green
  Wire 2: Short: Power, 165 ohms: Volume Down, 652 ohms: Seek Down, Color: Yellow
 */
-
 const int carAcc = 2;
 const int signalWire1 = A6; // Well, with testing, I can't use digitalRead on an analog pin
 const int signalWire2 = A7; // So I just created the while loop for when the voltage reading is lowish
@@ -98,16 +96,8 @@ void loop() {
       if ((wire2 < 10) && (wire2 >= 0)) {
         buttonPress(201, signalWire2); // Power
       }
-
-  // Comment the following print lines when done debugging
-     Serial.print("Debug: W1- ");
-     Serial.print(wire1);
-     Serial.print(" W2- ");
-     Serial.print(wire2);
-     Serial.print(" carAcc- ");
-     Serial.print(digitalRead(carAcc));
-     Serial.print(" sS- ");
-     Serial.println(sentShutdown);
+  // Add the debug prints between here and the next close brace
+     
     }
   }
 }
