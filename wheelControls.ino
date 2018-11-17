@@ -49,11 +49,13 @@ void loop() {
   if ((sentShutdown == 0) && (digitalRead(carAcc) == LOW)) {
     Serial.println(100);
     sentShutdown = 1;
+    delay(3000);
     }
   // Ok now we need to be able to send the startup signal when car is on
   if ((sentShutdown == 1) && (digitalRead(carAcc) == HIGH)) {
     Serial.println(200);
     sentShutdown = 0;
+    delay(3000);
   }
  
   // This statement after understands the startup signal has been sent and the car is on
