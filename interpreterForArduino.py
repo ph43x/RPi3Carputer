@@ -125,6 +125,7 @@ while True: #changed from if ardPort.isOpen to while True
             print(suspendSystem.suspend_system_now('1'))
     
         if '200' in ardDecode: # The car is on, Wakey Wakey
+            ardPort.write('1').encode('UTF-8')
             resumeSystem = Pyro4.Proxy("PYRONAME:system.resume")
             print(resumeSystem.resume_system_now('1'))
     
