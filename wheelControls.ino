@@ -9,6 +9,7 @@
 const int carAcc = 2;
 const int signalWire1 = A6; // Well, with testing, I can't use digitalRead on an analog pin
 const int signalWire2 = A7; // So I just created the while loop for when the voltage reading is lowish
+const int wakeUpPin = 13;   // Pin attached to the power relay for RPi3
 float wire1 = 0;
 float wire2 = 0;
 int sentShutdown = 0;
@@ -23,6 +24,7 @@ void setup() {
   pinMode(signalWire1, INPUT_PULLUP);
   pinMode(signalWire2, INPUT_PULLUP);
   pinMode(carAcc, INPUT);
+  pinMode(wakeUpPin, OUTPUT);
 }
 
 void buttonPress(int sendVal, int sendWire){
@@ -45,17 +47,35 @@ void buttonPress(int sendVal, int sendWire){
 
 void loop() {
   // This portion identifies that the shutdown signal has not been sent
-  // and the ignition is now off
+  // and the ignition is now off. So shutdown signal is sent, 15 second timer, then power off RPi3
   if ((sentShutdown == 0) && (digitalRead(carAcc) == LOW)) {
     Serial.println(100);
     sentShutdown = 1;
-    delay(3000);
+    delay(15000);
+    digitalWrite(wakeUpPin) = LOW;
     }
   // Ok now we need to be able to send the startup signal when car is on
+  // Sense car is on, set the pin to the relay high to let the RPi boot
+  // Wait 15 seconds, then send 200 over serial and check if a response is had
+  // If not, send 200 again every second until a response is received.
   if ((sentShutdown == 1) && (digitalRead(carAcc) == HIGH)) {
+    digitalWrite(wakeUpPin) = HIGH;
+    delay(15000);
     Serial.println(200);
-    sentShutdown = 0;
-    delay(3000);
+    delay(500);
+    while (sentShutdown == 1){
+      if (Serial.available() > 0) {
+        char c = Serial.read();
+        if (c == '1'){
+          sentShutdown = 0;
+        }
+      }
+      else {
+        Serial.flush();
+        Serial.println(200);
+        delay(1000);
+      }
+    }
   }
  
   // This statement after understands the startup signal has been sent and the car is on
