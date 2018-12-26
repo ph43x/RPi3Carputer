@@ -76,11 +76,11 @@ void loop() {
 
     if ((millis() - lastDebounceTime) > debounceDelay) {
       if ((wire1 < 300) && (wire1 >= 55)) {
-        buttonPress(103, signalWire1); // Volume Up
+        buttonPress(102, signalWire1); // Seek Up
       }
 
       if ((wire1 < 55) && (wire1 >= 11)) {
-        buttonPress(102, signalWire1); // Seek Up
+        buttonPress(103, signalWire1); // Volume Up
       }
 
       if ((wire1 < 10) && (wire1 >= 0)) {
@@ -88,11 +88,11 @@ void loop() {
       }
 
       if ((wire2 < 300) && (wire2 >= 55)) {
-        buttonPress(203, signalWire2); // Volume Down
+        buttonPress(202, signalWire2); // Seek Down
       }
 
       if ((wire2 < 55) && (wire2 >= 11)) {
-        buttonPress(202, signalWire2); // Seek Down
+        buttonPress(203, signalWire2); // Volume Down
       }
 
       if ((wire2 < 10) && (wire2 >= 0)) {
