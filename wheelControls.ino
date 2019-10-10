@@ -52,14 +52,14 @@ void loop() {
     Serial.println(100);
     sentShutdown = 1;
     delay(15000);
-    digitalWrite(wakeUpPin) = LOW;
+    digitalWrite(wakeUpPin, LOW);
     }
   // Ok now we need to be able to send the startup signal when car is on
   // Sense car is on, set the pin to the relay high to let the RPi boot
   // Wait 15 seconds, then send 200 over serial and check if a response is had
   // If not, send 200 again every second until a response is received.
   if ((sentShutdown == 1) && (digitalRead(carAcc) == HIGH)) {
-    digitalWrite(wakeUpPin) = HIGH;
+    digitalWrite(wakeUpPin, HIGH);
     delay(15000);
     Serial.println(200);
     delay(500);
